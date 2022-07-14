@@ -15,24 +15,43 @@ class TableScreen extends StatefulWidget {
 }
 
 class _TableScreenState extends State<TableScreen> {
-
   int number;
+
   _TableScreenState(this.number);
 
+  var list = ['1', '2', '3', '4', '5'];
 
+  late ConfettiController _controllerCenter;
+
+  List<Alignment> alignmentList = [
+    Alignment.bottomLeft,
+    Alignment.bottomRight,
+    Alignment.topRight,
+    Alignment.topLeft,
+  ];
+  late Timer timer;
+  int index = 0;
+  int i = 1;
+  Color bottomColor = Colors.red;
+  Color topColor = Colors.yellow;
+  Alignment begin = Alignment.bottomCenter;
+  Alignment end = Alignment.topCenter;
+  int tab = 0;
+  bool clickedFlag = false;
+
+  // bool clickedFlag = false;
+  Random random = new Random();
+  var randomlist = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // table();
-    setState(() {
-      // j++;
-      i = number;
-    });
 
-    var element = list[random.nextInt(list.length)];
-    print("element" + element);
+    print('number' + i.toString());
+
+    // countDownController.start();
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 10));
 
@@ -48,29 +67,8 @@ class _TableScreenState extends State<TableScreen> {
     // TODO: implement dispose
     super.dispose();
     _controllerCenter.dispose();
+    timer.cancel();
   }
-
-  var list = ['1', '2', '3', '4', '5'];
-
-
-  late ConfettiController _controllerCenter;
-
-  List<Alignment> alignmentList = [
-    Alignment.bottomLeft,
-    Alignment.bottomRight,
-    Alignment.topRight,
-    Alignment.topLeft,
-  ];
-  int index = 0;
-  int i = 2;
-  Color bottomColor = Colors.red;
-  Color topColor = Colors.yellow;
-  Alignment begin = Alignment.bottomCenter;
-  Alignment end = Alignment.topCenter;
-  int tab = 0;
-  int j = 2;
-  Random random = new Random();
-  var randomlist = [];
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +94,11 @@ class _TableScreenState extends State<TableScreen> {
             Container(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(begin: end, end: begin, colors: [
-                      Color(0xff0044f3),
-                      Color(0xff1024EE),
-                      Color(0xffc38862),
-                      Color(0xfffbd5b8),
-                    ]))),
+              Color(0xff0044f3),
+              Color(0xff1024EE),
+              Color(0xffc38862),
+              Color(0xfffbd5b8),
+            ]))),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -108,7 +106,11 @@ class _TableScreenState extends State<TableScreen> {
                   color: Colors.white,
                   child: Row(
                     children: [
-                      IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back))
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.arrow_back))
                     ],
                   ),
                 ),
@@ -117,7 +119,7 @@ class _TableScreenState extends State<TableScreen> {
                   // height: MediaQuery.of(context).size.height,
                   child: GridView.builder(
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         // maxCrossAxisExtent: 75,
                         crossAxisCount: 5,
                         // childAspectRatio: 3 / 2,
@@ -132,98 +134,52 @@ class _TableScreenState extends State<TableScreen> {
                               if (randomlist[index].toString() ==
                                   tab.toString()) {
                                 _controllerCenter.play();
-                                showAlert(
-                                    context, true, randomlist[index].toString());
+
+                                setState(() {
+                                  clickedFlag = true;
+                                });
+                                showAlert(context, true,
+                                    randomlist[index].toString());
                               } else {
                                 // _controllerCenter.stop();
-                                showAlert(
-                                    context, false, randomlist[index].toString());
+                                // clickedFlag = false;
+                                setState(() {
+                                  clickedFlag = false;
+                                });
+                                showAlert(context, false,
+                                    randomlist[index].toString());
                               }
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Transform.rotate(
-                                angle: random.nextInt(100).toDouble(),
-                                child: Text(
-                                  randomlist[index].toString(),
-                                  // random.nextInt(20).toString(),
-                                  // from 0 upto 99 included,
-                                  style: TextStyle(
-                                      fontSize: 40,
-                                      color: randomlist[index].toString() ==
-                                          tab.toString()
-                                          ? Colors.grey[600]
-                                          : Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-
-                  /*   ListView.builder(
-                      itemCount: randomlist.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Transform.rotate(
-                          angle: 30.0,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
+                            child: Transform.rotate(
+                              angle: random.nextInt(100).toDouble(),
                               child: Text(
                                 randomlist[index].toString(),
                                 // random.nextInt(20).toString(),
                                 // from 0 upto 99 included,
                                 style: TextStyle(
-                                    fontSize: 40,
+                                    fontSize: 30,
                                     color: randomlist[index].toString() ==
                                             tab.toString()
-                                        ? Colors.red
+                                        ? Colors.white38
                                         : Colors.white,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
                         );
-                      }),*/
+                      }),
                 ),
-                /*SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 100,
-                  child: ListView.builder(
-                      itemCount: randomlist.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Transform.rotate(
-                          angle: random.nextInt(100).toDouble(),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                randomlist[index].toString(),
-                                // random.nextInt(20).toString(),
-                                // from 0 upto 99 included,
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    color: randomlist[index].toString() ==
-                                            tab.toString()
-                                        ? Colors.red
-                                        : Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                ),*/
                 Container(
                   margin: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                       color: Color(0xfffbddc6),
-                      boxShadow: [BoxShadow(color: Colors.black12,blurRadius: 5.0,spreadRadius: 4.0,offset: Offset(5.0,5.0))],
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 5.0,
+                            spreadRadius: 4.0,
+                            offset: Offset(5.0, 5.0))
+                      ],
                       // color: Colors.blue,
                       borderRadius: BorderRadius.circular(10)),
                   height: 75,
@@ -236,7 +192,7 @@ class _TableScreenState extends State<TableScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            i.toString(),
+                            number.toString(),
                             style: TextStyle(
                                 fontSize: 40,
                                 color: Colors.white,
@@ -250,7 +206,7 @@ class _TableScreenState extends State<TableScreen> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            j.toString() + '=',
+                            i.toString() + '=',
                             style: TextStyle(
                                 fontSize: 40,
                                 color: Colors.white,
@@ -270,11 +226,14 @@ class _TableScreenState extends State<TableScreen> {
                           alignment: Alignment.centerRight,
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                // i++;
-                                j++;
-                              });
-                              generateRandom();
+                              if (clickedFlag) {
+                                /*  setState(() {
+                                  i++;
+                                });*/
+                                generateRandom();
+                              } else {
+                                showAnswerAlert(context);
+                              }
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -282,12 +241,12 @@ class _TableScreenState extends State<TableScreen> {
                                   borderRadius: BorderRadius.circular(10)),
                               height: 75,
                               width: 75,
-                              child: Center(
+                              child: const Center(
                                   child: Text(
-                                    'Next',
-                                    style:
-                                    TextStyle(fontSize: 22, color: Colors.white),
-                                  )),
+                                'Next',
+                                style: TextStyle(
+                                    fontSize: 22, color: Colors.white),
+                              )),
                             ),
                           )),
                     ],
@@ -319,35 +278,39 @@ class _TableScreenState extends State<TableScreen> {
   }
 
   void generateRandom() {
-
-    randomlist.clear();
-    if (tab == i * 10) {
+    if (i > 10) {
       // print('generateRandom');
+      Navigator.pop(context);
     } else {
       // print(''+tab.toString());
 
       setState(() {
-        // j++;
-        tab = i * j;
+        i++;
+        tab = number * i;
       });
 
+      print('MyNIUMBER$number*' + '$i=' + '   $tab');
+
+      randomlist.clear();
+
       for (int i = 2; i < 33; i++) {
-        var j = 2;
+        var j = number;
         var k = i * j;
         setState(() {
-          j++;
+          // j++;
           randomlist.add(k);
           randomlist.shuffle();
-
         });
-        Timer.periodic(Duration(seconds: 10), (timer) {
-          //code to run on every 5 seconds
+
+        /*  timer = Timer.periodic(Duration(seconds: 10), (timer) {
           setState(() {
             // j++;
             randomlist.shuffle();
           });
-        });
+        });*/
+        // countDownController.start();
       }
+      print('random_list' + randomlist.toString());
     }
   }
 
@@ -356,26 +319,74 @@ class _TableScreenState extends State<TableScreen> {
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-            content: SizedBox(
-              height: 90,
+                content: SizedBox(
+              height: 150,
               child: Column(
                 children: [
                   Text(
-                    i.toString() + 'X' + j.toString() + '=',
-                    style: TextStyle(fontSize: 16),
+                    number.toString() + 'X' + i.toString() + '=$tab',
+                    style: TextStyle(fontSize: 20),
                   ),
-                  Text(b ? 'Yay! $tab is correct' : '$s is not correct',
-                      style: TextStyle(fontSize: 16)),
+                  Text(b ? 'Yay! $tab correct' : '$s is not correct',
+                      style: TextStyle(fontSize: 20)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
                           onPressed: () {
+                            _controllerCenter.stop();
+                            if (!b) {
+                              /*  setState(() {
+                                clickedFlag = false;
+                              });*/
+                              // showAnswerAlert(context);
+                            } else {
+                              setState(() {
+                                // j++;
+                                clickedFlag = false;
+                              });
+                              generateRandom();
+                            }
+
                             Navigator.of(context).pop();
                           },
-                          child: Text('Ok')),
-                      TextButton(onPressed: () {}, child: Text('Next')),
+                          child: Text(b ? 'Next' : 'Ok')),
+
+                      // TextButton(onPressed: () {}, child: Text('Next')),
                     ],
+                  ),
+                ],
+              ),
+            )));
+  }
+
+  void showAnswerAlert(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+                content: SizedBox(
+              height: 90,
+              child: Column(
+                children: [
+                  const Text(
+                    'Please select correct answer!',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Ok')),
+
+                        // TextButton(onPressed: () {}, child: Text('Next')),
+                      ],
+                    ),
                   ),
                 ],
               ),
